@@ -1,0 +1,5 @@
+{
+  "Database": {
+    "URI": "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\damirlut\\Documents\\midis\\DB-Practika\\database.mdf;Integrated Security=True;"
+  }
+}
