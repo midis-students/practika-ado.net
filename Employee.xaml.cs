@@ -20,8 +20,12 @@ namespace DB_Practika
     /// </summary>
     public partial class Employee : Window
     {
-        public Employee()
+
+        private int id;
+
+        public Employee(int id = -1)
         {
+            this.id = id;
             InitializeComponent();
 
             var pos = Positions.FindAll();
@@ -34,7 +38,8 @@ namespace DB_Practika
             }
 
             Salary.Content = "-";
-
+            DeleteButton.Visibility = id == -1 ? Visibility.Hidden : Visibility.Visible;
+            update_data();
         }
 
         private void PositionList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -43,8 +48,40 @@ namespace DB_Practika
             var item = list.SelectedItem as Positions;
 
             Salary.Content = item.salary + " $";
+        }
 
-            Console.WriteLine(item.id);
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (FirstName.Text.Length == 0) return;
+            if (LastName.Text.Length == 0) return;
+            if (MiddleName.Text.Length == 0) return;
+
+            if (id == -1)
+            {
+                Employees.Create(FirstName.Text,MiddleName.Text, LastName.Text, ((Positions)PositionList.SelectedItem).id );
+                MessageBox.Show("Сохранено!");
+                Close();
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        void update_data()
+        {
+            if (id == -1) return;
+
+            var e = Employees.FindOne(id);
+
+            FirstName.Text = e.first_name;
+            LastName.Text = e.last_name;
+            MiddleName.Text = e.middle_name;
+
+            PositionList.Text = e.position.name;
+            Salary.Content = e.position.salary + " $";
+
         }
     }
 }

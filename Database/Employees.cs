@@ -15,23 +15,65 @@ namespace DB_Practika.Database
         public string last_name { get; set; }
         public Positions position { get; set; }
 
-        public static List<Employees> GetAll()
+        public static List<Employees> FindAll()
         {
             var list = new List<Employees>();
+            using var connection = SQL.Instance.getConnection();
+            var query = @" SELECT * FROM Employees";
+            var command = new SqlCommand(query, connection);
 
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    list.Add(new Employees()
+                    {
+                        id = (int)reader["id"],
+                        first_name = (string)reader["first_name"],
+                        last_name = (string)reader["last_name"],
+                        middle_name = (string)reader["middle_name"],
+                        position = Positions.FindOne((int)reader["position"]),
+                    });
+                }
+            }
             return list;
         }
 
-        public static void Create(string first_name, string middle_name, string last_name)
+        public static Employees FindOne(int id)
         {
             using var connection = SQL.Instance.getConnection();
-            var query = @" INSERT INTO Employees(first_name,last_name,middle_name) VALUES ( @first_name, @last_name, @middle_name);";
+            var query = @" SELECT * FROM Employees WHERE id=@id";
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@id", id);
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                reader.Read();
+
+                return new Employees()
+                {
+                    id = (int)reader["id"],
+                    first_name = (string)reader["first_name"],
+                    last_name = (string)reader["last_name"],
+                    middle_name = (string)reader["middle_name"],
+                    position = Positions.FindOne((int)reader["position"]),
+                };
+
+            }
+        }
+
+        public static void Create(string first_name, string middle_name, string last_name, int position)
+        {
+            using var connection = SQL.Instance.getConnection();
+            var query = @" INSERT INTO Employees(first_name,last_name,middle_name,position) VALUES ( @first_name, @last_name, @middle_name,@pos);";
             var command = new SqlCommand(query, connection);
 
             command.Parameters.AddRange(new[]{
                 new SqlParameter("@first_name", first_name){ SqlDbType = SqlDbType.NVarChar,Size = 255 },
                 new SqlParameter("@middle_name", middle_name){ SqlDbType = SqlDbType.NVarChar,Size = 255 },
                 new SqlParameter("@last_name", last_name){ SqlDbType = SqlDbType.NVarChar,Size = 255  },
+                new SqlParameter("@pos", position){ SqlDbType = SqlDbType.Int  },
             });
 
             command.ExecuteNonQuery();

@@ -14,6 +14,7 @@ namespace DB_Practika
         {
             InitializeComponent();
             update_positions();
+            update_employees();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -52,6 +53,18 @@ namespace DB_Practika
             }
         }
 
+        void update_employees()
+        {
+            var list = Database.Employees.FindAll();
+
+            EmployeesList.Items.Clear();
+
+            foreach (var employee in list)
+            {
+                EmployeesList.Items.Add(employee);
+            }
+        }
+
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             var tab = ((TabItem)TabControl.SelectedItem).Name;
@@ -59,7 +72,7 @@ namespace DB_Practika
             switch (tab)
             {
                 case "Employee":
-                  
+                    update_employees();
                     break;
                 case "Positions":
                     update_positions();
@@ -79,11 +92,10 @@ namespace DB_Practika
             switch (tab)
             {
                 case "Employee":
-                    window = new Employee();
+                    window = new Employee(((Database.Employees)row.Item).id);
                     break;
                 case "Positions":
-                    var item = row.Item as Database.Positions;
-                    window = new Position(item.id);
+                    window = new Position(((Database.Positions)row.Item).id);
                     break;
                 case "EmployeeHistory": break;
                 default: MessageBox.Show("TabControl.SelectedItem = " + tab); break;

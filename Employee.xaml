@@ -11,15 +11,15 @@
             <StackPanel Width="380" Margin="10">
                 <StackPanel >
                     <Label Content="Фамилия" />
-                    <TextBox />
+                    <TextBox x:Name="LastName" />
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Имя" />
-                    <TextBox />
+                    <TextBox x:Name="FirstName" />
                 </StackPanel>
                 <StackPanel>
                     <Label Content="Отчество" />
-                    <TextBox />
+                    <TextBox  x:Name="MiddleName"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Width="380" Margin="0,10,0,10" >
@@ -30,6 +30,10 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Заработная плата:" />
                     <Label Content="10 $" x:Name="Salary" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,38,0,0">
+                    <Button Content="Сохранить" Click="Button_Click" />
+                    <Button Content="Удалить" x:Name="DeleteButton"  Margin="10,0,0,0" Click="DeleteButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

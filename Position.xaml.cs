@@ -14,7 +14,6 @@ namespace DB_Practika
         {
             InitializeComponent();
             this.id = id;
-            Console.WriteLine("Open "+id);
             update_data();
             DeleteButton.Visibility = id == -1 ? Visibility.Hidden : Visibility.Visible;
 
@@ -22,6 +21,9 @@ namespace DB_Practika
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (Name.Text.Length == 0) return;
+            if (Salary.Text.Length == 0) return;
+
             if(id == -1)
             {
                 Positions.Create( Name.Text, int.Parse( Salary.Text ) );
