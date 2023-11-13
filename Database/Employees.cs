@@ -8,7 +8,7 @@ namespace DB_Practika.Database
     internal class Employees
     {
 
-        public int id { get; private set; }
+        public int id { get; set; }
         public string first_name { get; set; }
  
         public string middle_name { get; set; }
@@ -63,6 +63,16 @@ namespace DB_Practika.Database
             }
         }
 
+        public static void Delete(int id)
+        {
+            using var connection = SQL.Instance.getConnection();
+            var query = @" DELETE FROM Employees WHERE id=@id";
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@id", id);
+            command.ExecuteNonQuery();
+        }
+
         public static void Create(string first_name, string middle_name, string last_name, int position)
         {
             using var connection = SQL.Instance.getConnection();
@@ -74,6 +84,23 @@ namespace DB_Practika.Database
                 new SqlParameter("@middle_name", middle_name){ SqlDbType = SqlDbType.NVarChar,Size = 255 },
                 new SqlParameter("@last_name", last_name){ SqlDbType = SqlDbType.NVarChar,Size = 255  },
                 new SqlParameter("@pos", position){ SqlDbType = SqlDbType.Int  },
+            });
+
+            command.ExecuteNonQuery();
+
+        }
+        public static void Update(int id,string first_name, string middle_name, string last_name, int position)
+        {
+            using var connection = SQL.Instance.getConnection();
+            var query = @" UPDATE Employees SET first_name = @first_name,last_name = @last_name, middle_name = @middle_name,position = @pos WHERE id=@id ";
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddRange(new[]{
+                new SqlParameter("@first_name", first_name){ SqlDbType = SqlDbType.NVarChar,Size = 255 },
+                new SqlParameter("@middle_name", middle_name){ SqlDbType = SqlDbType.NVarChar,Size = 255 },
+                new SqlParameter("@last_name", last_name){ SqlDbType = SqlDbType.NVarChar,Size = 255  },
+                new SqlParameter("@pos", position){ SqlDbType = SqlDbType.Int  },
+                new SqlParameter("@id", id){ SqlDbType = SqlDbType.Int  },
             });
 
             command.ExecuteNonQuery();

@@ -42,7 +42,7 @@
                         <DataGridTextColumn Header="id" Binding="{Binding Path=id}"/>
                         <DataGridTextColumn Header="Название" Binding="{Binding Path=name}"/>
                         <DataGridTextColumn Header="Оклад" Binding="{Binding Path=salary}"/>
-                        <DataGridTextColumn Header="Сотрудников" Binding="{Binding Path=employes_count}"/>
+                        <DataGridTextColumn Header="Сотрудников" Binding="{Binding Path=employees_count}"/>
                     </DataGrid.Columns>
                 </DataGrid>
 

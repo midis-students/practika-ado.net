@@ -39,6 +39,40 @@ namespace DB_Practika.Database
 
             return list;
         }
+        public static void Delete(int id)
+        {
+            using var connection = SQL.Instance.getConnection();
+            var query = @" DELETE FROM Positions WHERE id=@id";
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@id", id);
+            command.ExecuteNonQuery();
+        }
+        public static List<Employees> FindEmployees(int pos_id)
+        {
+            var list = new List<Employees>();
+            using var connection = SQL.Instance.getConnection();
+            var query = @" SELECT * FROM Employees WHERE position=@pos_id";
+            var command = new SqlCommand(query, connection);
+
+            command.Parameters.AddWithValue("@pos_id", pos_id);
+
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    list.Add(new Employees()
+                    {
+                        id = (int)reader["id"],
+                        first_name = (string)reader["first_name"],
+                        last_name = (string)reader["last_name"],
+                        middle_name = (string)reader["middle_name"],
+                    });
+                }
+            }
+
+            return list;
+        }
 
         public static Positions FindOne(int id)
         {

@@ -28,12 +28,17 @@
         <StackPanel>
             <Separator />
             <Label Content="Сотрудники" />
-            <DataGrid>
+            <DataGrid x:Name="EmployeesList" IsReadOnly="True" >
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="id"/>
-                    <DataGridTextColumn Header="Фамилия"/>
-                    <DataGridTextColumn Header="Имя"/>
-                    <DataGridTextColumn Header="Отчество"/>
+                    <DataGridTextColumn Header="id" Binding="{Binding Path=id}"/>
+                    <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=last_name}"/>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=first_name}"/>
+                    <DataGridTextColumn Header="Отчество" Binding="{Binding Path=middle_name}"/>
                 </DataGrid.Columns>
             </DataGrid>
 

@@ -59,14 +59,26 @@ namespace DB_Practika
             if (id == -1)
             {
                 Employees.Create(FirstName.Text,MiddleName.Text, LastName.Text, ((Positions)PositionList.SelectedItem).id );
-                MessageBox.Show("Сохранено!");
-                Close();
             }
+            else
+            {
+                Employees.Update(id,FirstName.Text, MiddleName.Text, LastName.Text, ((Positions)PositionList.SelectedItem).id);
+            }
+            MessageBox.Show("Сохранено!");
+            Close();
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (MessageBox.Show("Вы точно хотите уволить работягу?",
+                                "Уволить?!",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                Employees.Delete(id);
+                MessageBox.Show("Успешно удалили");
+                Close();
+            }
         }
 
         void update_data()
@@ -80,6 +92,7 @@ namespace DB_Practika
             MiddleName.Text = e.middle_name;
 
             PositionList.Text = e.position.name;
+            PositionList.SelectedItem = e.position;
             Salary.Content = e.position.salary + " $";
 
         }
