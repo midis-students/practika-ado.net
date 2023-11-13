@@ -10,10 +10,18 @@ namespace DB_Practika.Database
 
         public int id { get; set; }
         public string first_name { get; set; }
- 
+
         public string middle_name { get; set; }
         public string last_name { get; set; }
         public Positions position { get; set; }
+
+        public string short_name
+        {
+            get
+            {
+                return $"{last_name} {first_name[0]}. {middle_name[0]}.";
+            }
+        }
 
         public static List<Employees> FindAll()
         {
@@ -73,10 +81,10 @@ namespace DB_Practika.Database
             command.ExecuteNonQuery();
         }
 
-        public static void Create(string first_name, string middle_name, string last_name, int position)
+        public static int Create(string first_name, string middle_name, string last_name, int position)
         {
             using var connection = SQL.Instance.getConnection();
-            var query = @" INSERT INTO Employees(first_name,last_name,middle_name,position) VALUES ( @first_name, @last_name, @middle_name,@pos);";
+            var query = @" INSERT INTO Employees(first_name,last_name,middle_name,position) VALUES ( @first_name, @last_name, @middle_name,@pos); SELECT SCOPE_IDENTITY();";
             var command = new SqlCommand(query, connection);
 
             command.Parameters.AddRange(new[]{
@@ -86,10 +94,9 @@ namespace DB_Practika.Database
                 new SqlParameter("@pos", position){ SqlDbType = SqlDbType.Int  },
             });
 
-            command.ExecuteNonQuery();
-
+            return Convert.ToInt32(command.ExecuteScalar());
         }
-        public static void Update(int id,string first_name, string middle_name, string last_name, int position)
+        public static void Update(int id, string first_name, string middle_name, string last_name, int position)
         {
             using var connection = SQL.Instance.getConnection();
             var query = @" UPDATE Employees SET first_name = @first_name,last_name = @last_name, middle_name = @middle_name,position = @pos WHERE id=@id ";

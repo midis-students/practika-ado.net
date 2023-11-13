@@ -37,6 +37,7 @@ namespace DB_Practika.Database
 
             Employees.InitTable();
             Positions.InitTable();
+            EmployHistory.InitTable();
 
         }
 
@@ -51,6 +52,7 @@ namespace DB_Practika.Database
 
         }
 
+ 
         public SqlConnection getConnection()
         {
             var connection = new SqlConnection(connectionString);

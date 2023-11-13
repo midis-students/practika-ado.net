@@ -22,6 +22,7 @@ namespace DB_Practika
     {
 
         private int id;
+        private Employees prev;
 
         public Employee(int id = -1)
         {
@@ -32,7 +33,7 @@ namespace DB_Practika
 
             PositionList.Items.Clear();
 
-            foreach(var item in pos )
+            foreach (var item in pos)
             {
                 PositionList.Items.Add(item);
             }
@@ -55,15 +56,27 @@ namespace DB_Practika
             if (FirstName.Text.Length == 0) return;
             if (LastName.Text.Length == 0) return;
             if (MiddleName.Text.Length == 0) return;
+            if (PositionList.SelectedItem == null) return;
+
+            var pos_id = ((Positions)PositionList.SelectedItem).id;
+
 
             if (id == -1)
             {
-                Employees.Create(FirstName.Text,MiddleName.Text, LastName.Text, ((Positions)PositionList.SelectedItem).id );
+                id = Employees.Create(FirstName.Text, MiddleName.Text, LastName.Text, pos_id);
+                EmployHistory.AddToHistory(id, pos_id);
             }
             else
             {
-                Employees.Update(id,FirstName.Text, MiddleName.Text, LastName.Text, ((Positions)PositionList.SelectedItem).id);
+                Employees.Update(id, FirstName.Text, MiddleName.Text, LastName.Text, pos_id);
+
+                if (prev.position.id != pos_id)
+                {
+                    EmployHistory.AddToHistory(id, pos_id);
+                }
             }
+
+
             MessageBox.Show("Сохранено!");
             Close();
         }
@@ -86,6 +99,7 @@ namespace DB_Practika
             if (id == -1) return;
 
             var e = Employees.FindOne(id);
+            prev = e;
 
             FirstName.Text = e.first_name;
             LastName.Text = e.last_name;
@@ -95,6 +109,18 @@ namespace DB_Practika
             PositionList.SelectedItem = e.position;
             Salary.Content = e.position.salary + " $";
 
+            var list = Database.EmployHistory.FindByEmploye(id);
+
+            EmployeesHistoryList.Items.Clear();
+
+            foreach (var employee in list)
+            {
+                EmployeesHistoryList.Items.Add(employee);
+            }
+
         }
+
+  
+
     }
 }

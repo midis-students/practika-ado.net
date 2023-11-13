@@ -38,7 +38,14 @@
             </StackPanel>
         </StackPanel>
         <StackPanel>
-
+            <DataGrid x:Name="EmployeesHistoryList" IsReadOnly="True" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="id" Binding="{Binding Path=id}"/>
+                    <DataGridTextColumn Header="Должность" Binding="{Binding Path=position.name}"/>
+                    <DataGridTextColumn Header="Начало" Binding="{Binding Path=start_date}"/>
+                    <DataGridTextColumn Header="Конец" Binding="{Binding Path=end_date}"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
     </StackPanel>
 </Window>

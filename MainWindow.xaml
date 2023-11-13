@@ -48,7 +48,21 @@
 
             </TabItem>
             <TabItem Header="Кадровый учёт" x:Name="EmployeeHistory">
-                <Grid Background="#FFE5E5E5"/>
+                <DataGrid x:Name="EmployeesHistoryList" IsReadOnly="True" >
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="id" Binding="{Binding Path=id}"/>
+                        <DataGridTextColumn Header="Сотрудник" Binding="{Binding Path=employe.short_name}"/>
+                        <DataGridTextColumn Header="Должность" Binding="{Binding Path=position.name}"/>
+                        <DataGridTextColumn Header="Начало" Binding="{Binding Path=start_date}"/>
+                        <DataGridTextColumn Header="Конец" Binding="{Binding Path=end_date}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
             </TabItem>
         </TabControl>
     </StackPanel>
