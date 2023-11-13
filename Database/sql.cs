@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Text.RegularExpressions;
 
 namespace DB_Practika.Database
 {
@@ -34,21 +33,10 @@ namespace DB_Practika.Database
 
             Instance = this;
 
-            Entity[] entities = { new Employees() };
+            Console.WriteLine($"Start entities sync");
 
-            Console.WriteLine($"Start {entities.Length} entities sync");
-
-            foreach (var entity in entities)
-            {
-                if (!tableExists(entity.GetType().Name))
-                {
-                    entity.CreateTable();
-                }
-                else
-                {
-                    Console.WriteLine($"{entity.GetType().Name} table exists");
-                }
-            }
+            Employees.InitTable();
+            Positions.InitTable();
 
         }
 
@@ -58,8 +46,8 @@ namespace DB_Practika.Database
             var query = @"SELECT COUNT(*) FROM sys.objects WHERE object_id = OBJECT_ID(@table) AND type in (N'U')";
             var command = new SqlCommand(query, connection);
             command.Parameters.Add(new SqlParameter("@table", tableName));
-            var result = command.ExecuteScalar();
-            return (int)result == 1;
+            var result = (int)command.ExecuteScalar();
+            return result == 1;
 
         }
 
@@ -79,40 +67,6 @@ namespace DB_Practika.Database
             return connection;
         }
 
-    }
-
-    public static class TypeExtensions
-    {
-        public static object GetDefault(this Type t)
-        {
-            Func<object> f = GetDefault<object>; // quick hack to get generic method
-            return f.Method.GetGenericMethodDefinition().MakeGenericMethod(t).Invoke(null, null);
-        }
-
-        private static T GetDefault<T>()
-        {
-            return default(T);
-        }
-    }
-
-    public static class SqlExtensions
-    {
-        private static readonly IDictionary<SqlDbType, String> TypeMap = new Dictionary<SqlDbType, String>
-        {
-            { SqlDbType.Int, "INT"},
-            { SqlDbType.NVarChar,"NVARCHAR" },
-            // add the rest here
-        };
-
-        public static String ToType(this SqlDbType type)
-        {
-            if (TypeMap.ContainsKey(type))
-            {
-                return TypeMap[type];
-            }
-
-            throw new ArgumentException($"{type} is not a supported");
-        }
     }
 }
 

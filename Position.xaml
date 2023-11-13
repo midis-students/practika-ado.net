@@ -1,0 +1,42 @@
+﻿<Window x:Class="DB_Practika.Position"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DB_Practika"
+        mc:Ignorable="d"
+        Title="Должность" Height="450" Width="800">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" >
+            <StackPanel Width="380" Margin="10">
+                <StackPanel >
+                    <Label Content="Название" />
+                    <TextBox x:Name="Name" />
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="Оклад" />
+                    <TextBox x:Name="Salary" />
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Width="380" Margin="0,10,0,10" VerticalAlignment="Bottom" >
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Сохранить" Click="Button_Click" />
+                    <Button Content="Удалить" x:Name="DeleteButton"  Margin="10,0,0,0" Click="DeleteButton_Click" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel>
+            <Separator />
+            <Label Content="Сотрудники" />
+            <DataGrid>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="id"/>
+                    <DataGridTextColumn Header="Фамилия"/>
+                    <DataGridTextColumn Header="Имя"/>
+                    <DataGridTextColumn Header="Отчество"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </StackPanel>
+    </StackPanel>
+</Window>

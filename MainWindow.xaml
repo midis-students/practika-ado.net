@@ -1,12 +1,50 @@
-﻿<Window x:Class="DB_Practika.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DB_Practika"
+        xmlns:Database="clr-namespace:DB_Practika.Database" x:Class="DB_Practika.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="ADO.NET" Height="450" Width="800">
+    <StackPanel Background="#FFE5E5E5">
+        <ToolBar Height="33" VerticalAlignment="Top">
+            <Button Content="Добавить" Click="Button_Click"/>
+            <Button Content="Обновить" Click="Button_Click_1"/>
+        </ToolBar>
+        <TabControl x:Name="TabControl">
+            <TabItem x:Name="Employee" Header="Сотрудники" >
+                <DataGrid>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="id" Binding="{Binding Path=id}"/>
+                        <DataGridTextColumn Header="Фамилия"/>
+                        <DataGridTextColumn Header="Имя"/>
+                        <DataGridTextColumn Header="Отчество"/>
+                        <DataGridTextColumn Header="Должность"/>
+                        <DataGridTextColumn Header="Оклад"/>
+                    </DataGrid.Columns>
+                </DataGrid>
 
-    </Grid>
+            </TabItem>
+            <TabItem x:Name="Positions" Header="Должности">
+                <DataGrid x:Name="PositionsData" IsReadOnly="True" >
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridRow">
+                            <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="id" Binding="{Binding Path=id}"/>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Path=name}"/>
+                        <DataGridTextColumn Header="Оклад" Binding="{Binding Path=salary}"/>
+                        <DataGridTextColumn Header="Сотрудников" Binding="{Binding Path=employes_count}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+            </TabItem>
+            <TabItem Header="Кадровый учёт" x:Name="EmployeeHistory">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+        </TabControl>
+    </StackPanel>
 </Window>

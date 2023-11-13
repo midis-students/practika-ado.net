@@ -5,23 +5,19 @@ using System.Data;
 
 namespace DB_Practika.Database
 {
-    internal class Employees : Entity
+    internal class Employees
     {
 
-        [EntityField(SqlDbType.Int, field = "IDENTITY")]
         public int id { get; private set; }
-        [EntityField(SqlDbType.NVarChar, size = 255)]
         public string first_name { get; set; }
-        [EntityField(SqlDbType.NVarChar, size = 255)]
+ 
         public string middle_name { get; set; }
-        [EntityField(SqlDbType.NVarChar, size = 255)]
         public string last_name { get; set; }
+        public Positions position { get; set; }
 
         public static List<Employees> GetAll()
         {
             var list = new List<Employees>();
-
-            Console.WriteLine(SqlDbType.NVarChar.ToType());
 
             return list;
         }
@@ -33,13 +29,34 @@ namespace DB_Practika.Database
             var command = new SqlCommand(query, connection);
 
             command.Parameters.AddRange(new[]{
-                new SqlParameter("@first_name", first_name){ SqlDbType = System.Data.SqlDbType.NVarChar,Size = 255 },
-                new SqlParameter("@middle_name", middle_name){ SqlDbType = System.Data.SqlDbType.NVarChar,Size = 255 },
-                new SqlParameter("@last_name", last_name){ SqlDbType = System.Data.SqlDbType.NVarChar,Size = 255  },
+                new SqlParameter("@first_name", first_name){ SqlDbType = SqlDbType.NVarChar,Size = 255 },
+                new SqlParameter("@middle_name", middle_name){ SqlDbType = SqlDbType.NVarChar,Size = 255 },
+                new SqlParameter("@last_name", last_name){ SqlDbType = SqlDbType.NVarChar,Size = 255  },
             });
 
             command.ExecuteNonQuery();
 
+        }
+
+        public static void InitTable()
+        {
+            if (SQL.tableExists("Employees")) return;
+
+            using var connection = SQL.Instance.getConnection();
+            var query = @"
+                CREATE TABLE [Employees](
+                    [id] INT PRIMARY KEY IDENTITY(1,1),
+                    [first_name] NVARCHAR(50),
+                    [middle_name] NVARCHAR(50),
+                    [last_name] NVARCHAR(50),
+                    [position] INT NOT NULL,
+                    FOREIGN KEY (position) REFERENCES Positions(id)
+                );
+            ";
+            var command = new SqlCommand(query, connection);
+            command.ExecuteNonQuery();
+
+            Console.WriteLine("[Employess] created");
         }
     }
 }
